@@ -28,3 +28,4 @@
 /Users/zoewong/Documents/GitHub/BudgetCalculator/obj/Debug/net8.0/BudgetCalculator.pdb
 /Users/zoewong/Documents/GitHub/BudgetCalculator/obj/Debug/net8.0/BudgetCalculator.genruntimeconfig.cache
 /Users/zoewong/Documents/GitHub/BudgetCalculator/obj/Debug/net8.0/ref/BudgetCalculator.dll
+/Users/zoewong/Documents/GitHub/BudgetCalculator/obj/Debug/net8.0/BudgetCalculator.sourcelink.json
