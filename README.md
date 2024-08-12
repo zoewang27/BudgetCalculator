@@ -23,7 +23,7 @@ git clone https://github.com/zoewang27/BudgetCalculator.git
 cd BudgetCalculator
 ```
 
-### Clone the Project 
+### Install Dependencies
 Ensure you are in the project directory containing the BudgetCalculator.csproj file, then run the following command to restore the project's dependencies:
 ```bash
 dotnet restore
