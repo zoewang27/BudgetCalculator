@@ -4,19 +4,13 @@
 
 This is a Budget Calculator web application designed to calculate the ad budget. Users can input the total budget, agency fee percentage, third-party tool fee percentage, fixed costs, and other ad budgets. The system will calculate and display the maximum budget for a specific ad that fits within the total budget.
 
-## Tech Stack
-
-- ASP.NET Core 6.0
-- Razor Pages
-- C#
-
 ## Installation and Running
 
 ### Prerequisites
 
 Ensure you have the following software installed on your machine:
 
-- [.NET 6.0 SDK](https://dotnet.microsoft.com/download/dotnet/6.0)
+- [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 - [Visual Studio Code](https://code.visualstudio.com/) (optional)
 - [Git](https://git-scm.com/) (optional)
 
