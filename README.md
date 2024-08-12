@@ -43,11 +43,24 @@ Open a browser and navigate to http://localhost:5000/budget to view the applicat
 
 
 ## Usage Instructions
-Total Campaign Budget (Z): Enter the total budget available for the campaign.
-Agency Fee Percentage (Y1): Enter the agency fee percentage (e.g., 0.10 for 10%).
-Third-Party Tool Fee Percentage (Y2): Enter the third-party tool fee percentage (e.g., 0.05 for 5%).
-Fixed Cost for Agency Hours (HOURS): Enter the fixed cost for agency hours.
-Budgets for Other Ads: Enter the budgets for other ads, separated by commas (e.g., 1000,1500,2000).
-Click the Calculate button, and the system will calculate and display the maximum budget for the specific ad that fits within the total budget.
+1. **Total Campaign Budget (Z):** Enter the total budget available for the campaign.
+2. **Agency Fee Percentage (Y1):** Enter the agency fee percentage (e.g., 0.10 for 10%).
+3. **Third-Party Tool Fee Percentage (Y2):** Enter the third-party tool fee percentage (e.g., 0.05 for 5%).
+4. **Fixed Cost for Agency Hours (HOURS):** Enter the fixed cost for agency hours.
+5. **Budgets for Other Ads:** Enter the budgets for other ads, separated by commas (e.g., 1000,1500,2000).
+
+<img width="957" alt="image" src="https://github.com/user-attachments/assets/1cc73caf-dc14-4224-91fc-4f72fed91219">
+
 
 ## Testing
+
+### Unit Tests
+
+Unit tests are included in the `BudgetCalculator.Tests` project and are written using `xUnit`. These tests ensure that the Goal Seek function and other components of the application work as expected with various inputs.
+
+### Running Tests
+
+To run the tests, use the following command from the root directory of the solution:
+
+```bash
+dotnet test
