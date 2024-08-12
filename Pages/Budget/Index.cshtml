@@ -1,0 +1,44 @@
+@page
+@model BudgetCalculator.Pages.Budget.IndexModel
+
+<h1>Budget Calculator</h1>
+
+<form method="post">
+    <div>
+        <label for="Z">Total Campaign Budget (Z):</label>
+        <input type="number" id="Z" name="Z" step="any" required />
+    </div>
+    </br>
+    <div>
+        <label for="Y1">Agency Fee Percentage (Y1):</label>
+        <input type="number" id="Y1" name="Y1" step="any" required />
+        <small>(as a decimal, e.g., 0.10 for 10%)</small>
+    </div>
+    </br>
+    <div>
+        <label for="Y2">Third-Party Tool Fee Percentage (Y2):</label>
+        <input type="number" id="Y2" name="Y2" step="any" required />
+        <small>(as a decimal, e.g., 0.05 for 5%)</small>
+    </div>
+    </br>
+    <div>
+        <label for="HOURS">Fixed Cost for Agency Hours (HOURS):</label>
+        <input type="number" id="HOURS" name="HOURS" step="any" required />
+    </div>
+    </br>
+    <div>
+        <label for="otherAdsBudgets">Budgets for Other Ads (comma separated):</label>
+        <input type="text" id="otherAdsBudgets" name="otherAdsBudgets" required />
+        <small>(e.g., 1000,1500,2000)</small>
+    </div>
+    </br>
+    <button type="submit">Calculate</button>
+    </br>
+    </br>
+</form>
+
+@if (Model.Result.HasValue)
+{
+    <h2>Calculated Budget</h2>
+    <p>The maximum budget for the specific ad that fits within the total budget is: @Model.Result.Value</p>
+}
