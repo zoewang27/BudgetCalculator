@@ -55,17 +55,3 @@ The application will start running on [http://localhost:5000] by default. If it 
 ### Access the Application
 Open a browser and navigate to http://localhost:5000/budget to view the application.
 
-
-
-## Testing
-
-### Unit Tests
-
-Unit tests are included in the `BudgetCalculator.Tests` project and are written using `xUnit`. These tests ensure that the Goal Seek function and other components of the application work as expected with various inputs.
-
-### Running Tests
-
-To run the tests, use the following command from the root directory of the solution:
-
-```bash
-dotnet test
