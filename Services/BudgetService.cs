@@ -7,7 +7,7 @@
  * 
  * 2. The GoalSeekBinarySearch method uses a binary search algorithm to find the value of X that makes the total budget close to the target value Z.
  *    - Input parameters include the total campaign budget Z for budget calculations, Y1 and Y2, an array of other ad budgets, HOURS, and optional parameters for tolerance and maximum iterations.
- *    - The output is the value of X that results in a total budget close to the target value Z.
+ *    - The output is the value of X that results in a total budget close to the Z.
  */
 
 namespace BudgetCalculator.Services
