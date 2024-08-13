@@ -55,3 +55,12 @@ The application will start running on [http://localhost:5000] by default. If it 
 ### Access the Application
 Open a browser and navigate to http://localhost:5000/budget to view the application.
 
+
+## Testing
+### Unit Tests
+Unit tests are located in the Tests folder and are written using xUnit.
+
+Run tests with:
+```bash
+dotnet test
+```

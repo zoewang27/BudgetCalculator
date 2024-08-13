@@ -17,8 +17,9 @@
   </ItemGroup>
 
 
-  <ItemGroup>
-    <Using Include="Xunit" />
+   <ItemGroup>
+    <ProjectReference Include="../BudgetCalculator.csproj" />
   </ItemGroup>
+  
 
 </Project>
