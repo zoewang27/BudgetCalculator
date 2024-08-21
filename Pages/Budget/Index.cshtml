@@ -1,9 +1,77 @@
 @page
 @model BudgetCalculator.Pages.Budget.IndexModel
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse; 
+        margin: 20px 0; 
+    }
+
+    th, td {
+        border: 1px solid #ddd; 
+        padding: 12px;
+        text-align: left; 
+    }
+
+    th {
+        background-color: #f4f4f4; 
+        color: #333;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9; 
+    }
+
+    tr:hover {
+        background-color: #f1f1f1; 
+    }
+</style>
 
 <h1>Budget Calculator</h1>
 
 <form method="post">
+    @* <div>
+        <label for="numAds">Number of Ads Budgets:</label>
+        <select id="numAds" name="num">
+            @for (int i = 0; i <= 20; i++)
+            {
+                <option value="@i">@i</option>
+            }
+        </select>
+        <button type="button" id="generateFields">Add Ads</button>
+    </div>
+    </br>
+    <div id="adFieldsContainer" style="background-color: rgb(242, 240, 240);">
+        <!-- Dynamic ad fields will be rendered here -->
+    </div> *@
+
+    <div>
+        <label for="numAds">Ad budget X1</label>
+        <input type="number" id="X1" name="X1" step="any" required />
+        <input type="checkbox"  asp-for="UsedThirdPartyToolX1"/>
+        <label  asp-for="UsedThirdPartyToolX1">Used third-party tool</label>
+    </div>
+    </br>
+        <div>
+        <label for="numAds">Ad budget X2</label>
+        <input type="number" id="X2" name="X2" step="any" required />
+        <input type="checkbox" asp-for="UsedThirdPartyToolX2"  />
+        <label asp-for="UsedThirdPartyToolX2">Used third-party tool</label>
+    </div>
+    </br>
+        <div>
+        <label for="numAds">Ad budget X3</label>
+        <input type="number" id="X3" name="X3" step="any" required />
+        <input type="checkbox" asp-for="UsedThirdPartyToolX3" />
+        <label asp-for="UsedThirdPartyToolX3">Used third-party tool</label>
+    </div>
+    </br>
+        <div>
+        <label for="numAds">Ad budget - Target Xi: will be Calculated</label>
+        <input type="checkbox" asp-for="UsedThirdPartyToolXi" />
+        <label asp-for="UsedThirdPartyToolXi">Used third-party tool</label>
+    </div>
+    </br>
     <div>
         <label for="Z">Total Campaign Budget (Z):</label>
         <input type="number" id="Z" name="Z" step="any" required />
@@ -20,16 +88,10 @@
         <input type="number" id="Y2" name="Y2" step="any" required />
         <small>(as a decimal, e.g., 0.05 for 5%)</small>
     </div>
-    </br>
+    <br>
     <div>
         <label for="HOURS">Fixed Cost for Agency Hours (HOURS):</label>
         <input type="number" id="HOURS" name="HOURS" step="any" required />
-    </div>
-    </br>
-    <div>
-        <label for="otherAdsBudgets">Budgets for Other Ads (comma separated):</label>
-        <input type="text" id="otherAdsBudgets" name="otherAdsBudgets" required />
-        <small>(e.g., 1000,1500,2000)</small>
     </div>
     </br>
     <button type="submit">Calculate</button>
@@ -37,8 +99,69 @@
     </br>
 </form>
 
-@if (Model.Result.HasValue)
+<h3>Budget Calculation Results</h3>
+@if (Model.Results.Any())
 {
-    <h2>Calculated Budget</h2>
-    <p>The maximum budget for the specific ad that fits within the total budget is: @Model.Result.Value</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Implementation</th>
+                <th>Budget</th>
+                <th>Iterations</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var result in Model.Results)
+            {
+                if (result.Key == "BinarySearch" || result.Key == "NewtonMethod" )
+                {
+                    <tr>
+                        <td>@result.Key</td>
+                        <td>@result.Value.budget</td>
+                        <td>@result.Value.iterations</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
 }
+else
+{
+    <p>No budget calculation has been performed yet.</p>
+}
+
+
+
+@* 
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const container = document.getElementById('adFieldsContainer');
+            const generateFieldsButton = document.getElementById('generateFields');
+            const numAdsSelect = document.getElementById('numAds');
+
+            function generateFields() {
+                const numAds = parseInt(numAdsSelect.value);
+                container.innerHTML = ''; // Clear existing fields
+                for (let i = 1; i <= numAds; i++) {
+                    const fieldDiv = document.createElement('div');
+                    fieldDiv.className = 'ad-field';
+                    fieldDiv.innerHTML = `
+                        <label for="X${i}">X${i}</label>
+                        <input type="number" id="X${i}" name="Ads[X${i}]" step="any" required />
+                        <input type="checkbox" asp-for="UsedThirdPartyToolsX${i}" />
+                        <label asp-for="UsedThirdPartyToolsX${i}">Used third-party tool</label>
+                    `;
+                    container.appendChild(fieldDiv);
+                    const lineBreak = document.createElement('br');
+                    container.appendChild(lineBreak);
+                }
+            }
+
+            generateFieldsButton.addEventListener('click', generateFields);
+
+            // Optionally generate fields based on the default selection
+            generateFields();
+        });
+    </script>
+} *@

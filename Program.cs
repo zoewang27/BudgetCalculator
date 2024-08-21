@@ -7,10 +7,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddTransient<BudgetService>(); // 注册 BudgetService
+
+builder.Services.AddTransient<BinarySearch>();
+builder.Services.AddTransient<NewtonMethod>();
+builder.Services.AddTransient<IGoalSeek, BinarySearch>(); 
+builder.Services.AddTransient<IGoalSeek, NewtonMethod>(); 
+
 
 var app = builder.Build();
-
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

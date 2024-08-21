@@ -4,52 +4,80 @@ using System;
 using System.Linq;
 using BudgetCalculator.Services; 
 
-namespace BudgetCalculator.Pages.Budget
+namespace BudgetCalculator.Pages.Budget;
+
+public class IndexModel : PageModel
 {
-    public class IndexModel : PageModel
+    private readonly IEnumerable<IGoalSeek> _goalSeeks;
+
+    // Constructor injection of IGoalSeek service collection
+    public IndexModel(IEnumerable<IGoalSeek> goalSeeks)
     {
-        private readonly BudgetService _budgetService;
+        _goalSeeks = goalSeeks;
+    }
 
-        public IndexModel(BudgetService budgetService)
+    [BindProperty]
+    public double X1 { get; set; }
+
+    [BindProperty]
+    public double X2 { get; set; }
+
+    [BindProperty]
+    public double X3 { get; set; }
+
+    [BindProperty]
+    public bool UsedThirdPartyToolX1 { get; set; }
+
+    [BindProperty]
+    public bool UsedThirdPartyToolX2 { get; set; }
+
+    [BindProperty]
+    public bool UsedThirdPartyToolX3 { get; set; }
+
+    [BindProperty]
+    public bool UsedThirdPartyToolXi { get; set; }
+
+    [BindProperty]
+    public double Z { get; set; }
+
+    [BindProperty]
+    public double Y1 { get; set; }
+
+    [BindProperty]
+    public double Y2 { get; set; }
+
+    [BindProperty]
+    public double HOURS { get; set; }
+    
+    public Dictionary<string, (double budget, int iterations)> Results { get; set; } = new Dictionary<string, (double budget, int iterations)>();
+
+    public void OnGet()
+    {
+    }
+
+    public void OnPost()
+    {
+        try
         {
-            _budgetService = budgetService;
-        }
+            double sumOtherAds = X1 + X2 + X3;
 
-        [BindProperty]
-        public double Z { get; set; }
+            double sumToolAd = 0;
+            if (UsedThirdPartyToolX1) sumToolAd += X1;
+            if (UsedThirdPartyToolX2) sumToolAd += X2;
+            if (UsedThirdPartyToolX3) sumToolAd += X3;
 
-        [BindProperty]
-        public double Y1 { get; set; }
-
-        [BindProperty]
-        public double Y2 { get; set; }
-
-        [BindProperty]
-        public double HOURS { get; set; }
-
-        [BindProperty]
-        public string OtherAdsBudgets { get; set; }
-
-        public double? Result { get; set; }
-
-        public void OnGet()
-        {
-        }
-
-        public void OnPost()
-        {
-            try
+            foreach (var goalSeek in _goalSeeks)
             {
-                var otherAdsBudgetsArray = OtherAdsBudgets.Split(',')
-                                                         .Select(double.Parse)
-                                                         .ToArray();
-                Result = _budgetService.GoalSeekBinarySearch(Z, Y1, Y2, otherAdsBudgetsArray, HOURS);
+                var result = goalSeek.FindTheBestBudget(sumOtherAds, Z, Y1, Y2, UsedThirdPartyToolXi, sumToolAd, HOURS);
+                var implementationName = goalSeek.GetType().Name;
+                Results[implementationName] = (result.budget, result.iterations);
             }
-            catch (Exception ex)
-            {
-                // Handle the error appropriately
-                ModelState.AddModelError(string.Empty, $"An error occurred: {ex.Message}");
-            }
+
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, $"An error occurred: {ex.Message}"); 
         }
     }
 }
+
