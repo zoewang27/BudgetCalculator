@@ -11,11 +11,15 @@ This is a Budget Calculator web application designed to calculate the ad budget.
 
 
 ### Usage Instructions
-1. **Total Campaign Budget (Z):** Enter the total budget available for the campaign.
-2. **Agency Fee Percentage (Y1):** Enter the agency fee percentage (e.g., 0.10 for 10%).
-3. **Third-Party Tool Fee Percentage (Y2):** Enter the third-party tool fee percentage (e.g., 0.05 for 5%).
-4. **Fixed Cost for Agency Hours (HOURS):** Enter the fixed cost for agency hours.
-5. **Budgets for Other Ads:** Enter the budgets for other ads, separated by commas (e.g., 1000,1500,2000).
+1. **Ad Budget X1:** Enter the budget amount for the first ad. Indicate if a third-party tool is used by checking the corresponding checkbox.
+2. **Ad Budget X2:** Enter the budget amount for the second ad. Indicate if a third-party tool is used by checking the corresponding checkbox.
+3. **Ad Budget X3:** Enter the budget amount for the third ad. Indicate if a third-party tool is used by checking the corresponding checkbox.
+4. **Ad Budget - Target Xi:** This budget will be calculated based on the results. Use the checkbox to indicate if a third-party tool is used.
+5. **Total Campaign Budget (Z):** Enter the total budget available for the entire campaign.
+6. **Agency Fee Percentage (Y1):** Enter the agency fee percentage (e.g., 0.10 for 10%).
+7. **Third-Party Tool Fee Percentage (Y2):** Enter the third-party tool fee percentage (e.g., 0.05 for 5%).
+8. **Fixed Cost for Agency Hours (HOURS):** Enter the fixed cost for agency hours.
+
 
 
 ## Installation and Running
