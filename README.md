@@ -6,7 +6,8 @@ This is a Budget Calculator web application designed to calculate the ad budget.
 
 ## Demo
 
-<img width="1489" alt="image" src="https://github.com/user-attachments/assets/9febfd27-35ca-49dd-aa79-3ccb384d4355">
+<img width="1499" alt="image" src="https://github.com/user-attachments/assets/0b5d42c3-074c-49e4-a261-ce31e95182b2">
+
 
 
 ### Usage Instructions
