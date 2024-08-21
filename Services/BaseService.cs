@@ -1,4 +1,4 @@
-public abstract class BaseClass
+public abstract class BaseService
 {
     protected const double Tolerance = 1e-6;
     protected const int MaxIterations = 100;
