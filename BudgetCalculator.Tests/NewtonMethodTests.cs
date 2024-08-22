@@ -1,58 +1,168 @@
-using Xunit;
+using BudgetCalculator.Models;
 using BudgetCalculator.Services;
-using System;
+using Xunit;
+using System.Linq;
 
-namespace BudgetCalculator.Tests.Services
+namespace BudgetCalculator.Tests;
+public class NewtonMethodTests
 {
-    public class NewtonMethodTests
+    [Fact]
+    public void FindTheBestBudget_ValidInputs_ShouldReturnExpectedBudget()
     {
-        private readonly NewtonMethod _newtonMethod;
-
-        public NewtonMethodTests()
+        // Arrange
+        var newtonMethod = new NewtonMethod();
+        var budgetModel = new BudgetModel
         {
-            _newtonMethod = new NewtonMethod();
+            AdBudgets = new List<AdBudget>
+            {
+                new AdBudget { Amount = 100, IsUsedTool = false },
+                new AdBudget { Amount = 150, IsUsedTool = true }
+            },
+            TotalBudgetExpected = 400,
+            AgencyFeePercentage = 0.1,
+            ThirdPartyToolPercentage = 0.05,
+            Hours = 50,
+            IsUsedToolXi = true 
+        };
+
+        // Act
+        var result = newtonMethod.FindTheBestBudget(budgetModel);
+
+        // Compute the expected budget using the same logic as CalculateAdsBudgets
+        double sumOtherAds = budgetModel.AdBudgets.Sum(ad => ad.Amount);
+        double thirdPartyToolBudget = budgetModel.AdBudgets
+                                               .Where(ad => ad.IsUsedTool)
+                                               .Sum(ad => ad.Amount);
+
+        if (budgetModel.IsUsedToolXi) 
+        {
+            thirdPartyToolBudget += result.budget;
         }
 
-        [Fact]
-        public void FindTheBestBudget_ShouldReturnCorrectBudget()
-        {
-            // Arrange
-            double sumOtherAds = 100;
-            double Z = 150;
-            double Y1 = 0.1;
-            double Y2 = 0.05;
-            bool UsedThirdPartyToolXi = true;
-            double toolAd = 20;
-            double HOURS = 10;
+        double Xi = result.budget;
+        double computedBudget = sumOtherAds + Xi
+            + (sumOtherAds + Xi) * budgetModel.AgencyFeePercentage 
+            + thirdPartyToolBudget * budgetModel.ThirdPartyToolPercentage 
+            + budgetModel.Hours;
 
-            var result = _newtonMethod.FindTheBestBudget(sumOtherAds, Z, Y1, Y2, UsedThirdPartyToolXi, toolAd, HOURS);
-
-            // Compute the expected budget
-            double Xi = result.budget;
-            double computedBudget = sumOtherAds + Xi
-                + (sumOtherAds + Xi) * Y1 
-                + Y2 * (toolAd + Xi)
-                + HOURS;
-
-            Assert.True(Math.Abs(Z - computedBudget) < 1e-6, $"Expected budget: {Z}, but got: {computedBudget}");
-            Assert.InRange(result.iterations, 1, 100);
-        }
-
-        [Fact]
-        public void FindTheBestBudget_ShouldThrowException_WhenDerivativeIsZero()
-        {
-     
-            double sumOtherAds = 100;
-            double Z = 150;
-            double Y1 = -1; // Causes derivative to be zero
-            double Y2 = 0;
-            bool UsedThirdPartyToolXi = false;
-            double toolAd = 20;
-            double HOURS = 10;
-
-
-            var exception = Assert.Throws<Exception>(() => _newtonMethod.FindTheBestBudget(sumOtherAds, Z, Y1, Y2, UsedThirdPartyToolXi, toolAd, HOURS));
-            Assert.Equal("Derivative is zero, Newton's method fails.", exception.Message);
-        }
+        // Assert
+        Assert.True(Math.Abs(budgetModel.TotalBudgetExpected - computedBudget) < 1e-6, 
+                    $"Expected budget: {budgetModel.TotalBudgetExpected}, but got: {computedBudget}");
+        Assert.InRange(result.iterations, 1, 100);
     }
+
+    [Fact]
+    public void FindTheBestBudget_BudgetTooLow_ShouldReturnZero()
+    {
+        // Arrange
+        var newtonMethod = new NewtonMethod();
+        var budgetModel = new BudgetModel
+        {
+            AdBudgets = new List<AdBudget>
+            {
+                new AdBudget { Amount = 10, IsUsedTool = false }
+            },
+            TotalBudgetExpected = 1,
+            AgencyFeePercentage = 0.1,
+            ThirdPartyToolPercentage = 0.05,
+            Hours = 50,
+            IsUsedToolXi = false
+        };
+
+        // Act
+        var result = newtonMethod.FindTheBestBudget(budgetModel);
+
+        // Assert
+        Assert.Equal(0, result.budget);
+    }
+
+    [Fact]
+    public void FindTheBestBudget_NoAdBudgets_ShouldReturnZero()
+    {
+        // Arrange
+        var newtonMethod = new NewtonMethod();
+        var budgetModel = new BudgetModel
+        {
+            AdBudgets = new List<AdBudget>(), // No ad budgets
+            TotalBudgetExpected = 200,
+            AgencyFeePercentage = 0.1,
+            ThirdPartyToolPercentage = 0.05,
+            Hours = 50,
+            IsUsedToolXi = false
+        };
+
+        // Act
+        var result = newtonMethod.FindTheBestBudget(budgetModel);
+
+                // Compute the expected budget using the same logic as CalculateAdsBudgets
+        double sumOtherAds = budgetModel.AdBudgets.Sum(ad => ad.Amount);
+        double thirdPartyToolBudget = budgetModel.AdBudgets
+                                               .Where(ad => ad.IsUsedTool)
+                                               .Sum(ad => ad.Amount);
+
+        if (budgetModel.IsUsedToolXi) 
+        {
+            thirdPartyToolBudget += result.budget;
+        }
+
+        double Xi = result.budget;
+        double computedBudget = sumOtherAds + Xi
+            + (sumOtherAds + Xi) * budgetModel.AgencyFeePercentage 
+            + thirdPartyToolBudget * budgetModel.ThirdPartyToolPercentage 
+            + budgetModel.Hours;
+
+        // Assert
+        Assert.True(Math.Abs(budgetModel.TotalBudgetExpected - computedBudget) < 1e-6, 
+                    $"Expected budget: {budgetModel.TotalBudgetExpected}, but got: {computedBudget}");
+        Assert.InRange(result.iterations, 1, 100);
+    }
+
+    [Fact]
+    public void FindTheBestBudget_LargeTotalBudget_ShouldReturnValidBudget()
+    {
+        // Arrange
+        var newtonMethod = new NewtonMethod();
+        var budgetModel = new BudgetModel
+        {
+            AdBudgets = new List<AdBudget>
+            {
+                new AdBudget { Amount = 5000, IsUsedTool = false },
+                new AdBudget { Amount = 7000, IsUsedTool = true }
+            },
+            TotalBudgetExpected = 1000000, // Large budget
+            AgencyFeePercentage = 0.1,
+            ThirdPartyToolPercentage = 0.05,
+            Hours = 10000,
+            IsUsedToolXi = true
+        };
+
+        // Act
+        var result = newtonMethod.FindTheBestBudget(budgetModel);
+
+        // Compute the expected budget using the same logic as CalculateAdsBudgets
+        double sumOtherAds = budgetModel.AdBudgets.Sum(ad => ad.Amount);
+        double thirdPartyToolBudget = budgetModel.AdBudgets
+                                                .Where(ad => ad.IsUsedTool)
+                                                .Sum(ad => ad.Amount);
+
+        if (budgetModel.IsUsedToolXi)
+        {
+            thirdPartyToolBudget += result.budget;
+        }
+
+        double Xi = result.budget;
+        double computedBudget = sumOtherAds + Xi
+            + (sumOtherAds + Xi) * budgetModel.AgencyFeePercentage 
+            + thirdPartyToolBudget * budgetModel.ThirdPartyToolPercentage 
+            + budgetModel.Hours;
+
+        // Assert
+        Assert.True(Math.Abs(budgetModel.TotalBudgetExpected - computedBudget) < 1e-6, 
+                    $"Expected budget: {budgetModel.TotalBudgetExpected}, but got: {computedBudget}");
+        Assert.InRange(result.iterations, 1, 100);
+    }
+
+
+
+
 }

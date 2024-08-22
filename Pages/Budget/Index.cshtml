@@ -1,108 +1,112 @@
 @page
 @model BudgetCalculator.Pages.Budget.IndexModel
-<style>
-    table {
-        width: 100%;
-        border-collapse: collapse; 
-        margin: 20px 0; 
-    }
 
-    th, td {
-        border: 1px solid #ddd; 
-        padding: 12px;
-        text-align: left; 
-    }
 
-    th {
-        background-color: #f4f4f4; 
-        color: #333;
-    }
-
-    tr:nth-child(even) {
-        background-color: #f9f9f9; 
-    }
-
-    tr:hover {
-        background-color: #f1f1f1; 
-    }
-</style>
-
-<h1>Budget Calculator</h1>
+<h2>Budget Calculator</h2>
 
 <form method="post">
-    @* <div>
-        <label for="numAds">Number of Ads Budgets:</label>
-        <select id="numAds" name="num">
-            @for (int i = 0; i <= 20; i++)
+    <div>
+        <div class="row g-3 align-items-center">
+        <div class="col-auto">
+            <label for="numAds" class="col-form-label">Number of Other Ads Budgets:</label>
+        </div>
+        <div class="col-auto">
+            <select id="numAds" name="num" class="form-select">
+            @for (int i = 0; i <= 100; i++)
             {
                 <option value="@i">@i</option>
             }
-        </select>
-        <button type="button" id="generateFields">Add Ads</button>
+            </select>
+        </div>
+        <div class="col-auto">
+             <button type="button" id="generateFields" class="btn btn-success">Add Ads</button>
+        </div>
     </div>
-    </br>
-    <div id="adFieldsContainer" style="background-color: rgb(242, 240, 240);">
-        <!-- Dynamic ad fields will be rendered here -->
-    </div> *@
 
-    <div>
-        <label for="numAds">Ad budget X1</label>
-        <input type="number" id="X1" name="X1" step="any" required />
-        <input type="checkbox"  asp-for="UsedThirdPartyToolX1"/>
-        <label  asp-for="UsedThirdPartyToolX1">Used third-party tool</label>
+
+    </br>
+    <div id="ad-budgets-container">
+       
+    </div>
+
+
+     <div class="row g-3 align-items-center">
+        <div class="col-auto">
+             <label for="numAds" class="col-form-label">Ad budget - Target Xi:</label>
+        </div>
+        <div class="col-auto">
+            <label for="numAds" class="col-form-label">Will be calculated</label>
+        </div>
+        <div class="col-auto">
+            <input type="checkbox" asp-for="UsedThirdPartyToolXi" style="padding-left:30px ;"/>
+            <label asp-for="UsedThirdPartyToolXi">Used third-party tool</label>
+        </div>
     </div>
     </br>
-        <div>
-        <label for="numAds">Ad budget X2</label>
-        <input type="number" id="X2" name="X2" step="any" required />
-        <input type="checkbox" asp-for="UsedThirdPartyToolX2"  />
-        <label asp-for="UsedThirdPartyToolX2">Used third-party tool</label>
+
+    <div class="row g-3 align-items-center">
+        <div class="col-auto">
+            <label for="Z" class="col-form-label">Total Campaign Budget (Z):</label>
+        </div>
+        <div class="col-auto">
+            <input class="form-control" type="number" asp-for="Z" step="any" min="0.01" placeholder="Enter Total Campaign Budget" required />
+        </div>
+        <div class="col-auto">
+        </div>
+    </div>
+
+    </br>
+
+    <div class="row g-3 align-items-center">
+        <div class="col-auto">
+            <label for="Y1" class="col-form-label">Agency Fee Percentage (Y1):</label>
+        </div>
+        <div class="col-auto">
+            <input class="form-control" type="number" asp-for="Y1" step="0.01" min="0.01" max="0.99" required />
+        </div>
+        <div class="col-auto">
+            <span class="form-text">(as a decimal, e.g., 0.10 for 10%)</span>
+        </div>
     </div>
     </br>
-        <div>
-        <label for="numAds">Ad budget X3</label>
-        <input type="number" id="X3" name="X3" step="any" required />
-        <input type="checkbox" asp-for="UsedThirdPartyToolX3" />
-        <label asp-for="UsedThirdPartyToolX3">Used third-party tool</label>
+
+    <div class="row g-3 align-items-center">
+        <div class="col-auto">
+             <label for="Y2" class="col-form-label">Third-Party Tool Fee Percentage (Y2):</label>
+        </div>
+        <div class="col-auto">
+            <input class="form-control" type="number" asp-for="Y2" step="0.01" min="0.01" max="0.99" required />
+        </div>
+        <div class="col-auto">
+            <span class="form-text">(as a decimal, e.g., 0.05 for 5%)</span>
+        </div>
     </div>
+
     </br>
-        <div>
-        <label for="numAds">Ad budget - Target Xi: will be Calculated</label>
-        <input type="checkbox" asp-for="UsedThirdPartyToolXi" />
-        <label asp-for="UsedThirdPartyToolXi">Used third-party tool</label>
+
+        <div class="row g-3 align-items-center">
+        <div class="col-auto">
+             <label for="HOURS" class="col-form-label">Fixed Cost for Agency Hours (HOURS):</label>
+        </div>
+        <div class="col-auto">
+            <input class="form-control" type="number" asp-for="HOURS" step="any" min="0.01" required />
+        </div>
+        <div class="col-auto">
+            <span class="form-text">Fixed cost for agency hours</span>
+        </div>
     </div>
+
+
     </br>
-    <div>
-        <label for="Z">Total Campaign Budget (Z):</label>
-        <input type="number" id="Z" name="Z" step="any" required />
-    </div>
+    <button type="submit" class="btn btn-primary">Calculate</button>
     </br>
-    <div>
-        <label for="Y1">Agency Fee Percentage (Y1):</label>
-        <input type="number" id="Y1" name="Y1" step="any" required />
-        <small>(as a decimal, e.g., 0.10 for 10%)</small>
-    </div>
-    </br>
-    <div>
-        <label for="Y2">Third-Party Tool Fee Percentage (Y2):</label>
-        <input type="number" id="Y2" name="Y2" step="any" required />
-        <small>(as a decimal, e.g., 0.05 for 5%)</small>
-    </div>
-    <br>
-    <div>
-        <label for="HOURS">Fixed Cost for Agency Hours (HOURS):</label>
-        <input type="number" id="HOURS" name="HOURS" step="any" required />
-    </div>
-    </br>
-    <button type="submit">Calculate</button>
-    </br>
-    </br>
+    </br>   
 </form>
 
-<h3>Budget Calculation Results</h3>
+<h4>Budget Calculation Results</h4>
 @if (Model.Results.Any())
 {
-    <table>
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>Implementation</th>
@@ -131,37 +135,37 @@ else
 }
 
 
-
-@* 
 @section Scripts {
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const container = document.getElementById('adFieldsContainer');
-            const generateFieldsButton = document.getElementById('generateFields');
-            const numAdsSelect = document.getElementById('numAds');
+        document.getElementById('generateFields').addEventListener('click', function() {
+            const num = parseInt(document.getElementById('numAds').value, 10);
+            const container = document.getElementById('ad-budgets-container');
 
-            function generateFields() {
-                const numAds = parseInt(numAdsSelect.value);
-                container.innerHTML = ''; // Clear existing fields
-                for (let i = 1; i <= numAds; i++) {
-                    const fieldDiv = document.createElement('div');
-                    fieldDiv.className = 'ad-field';
-                    fieldDiv.innerHTML = `
-                        <label for="X${i}">X${i}</label>
-                        <input type="number" id="X${i}" name="Ads[X${i}]" step="any" required />
-                        <input type="checkbox" asp-for="UsedThirdPartyToolsX${i}" />
-                        <label asp-for="UsedThirdPartyToolsX${i}">Used third-party tool</label>
-                    `;
-                    container.appendChild(fieldDiv);
-                    const lineBreak = document.createElement('br');
-                    container.appendChild(lineBreak);
-                }
+            container.innerHTML = '';
+
+            for (let i = 0; i < num; i++) {
+                const div = document.createElement('div');
+                div.classList.add('ad-budget-row');
+                div.innerHTML = `
+                    <div class="row g-3 align-items-center">
+                    <div class="col-auto">
+                    <label class="col-form-label" for="X${i}">Ad budget X${i+1}</label>
+                    </div>
+                    <div class="col-auto">
+                    <input class="form-control" type="number" name="BudgetItems[${i}].amount" placeholder="Budget Amount" step="any" min="0.01" required/>
+                    </div>
+                    <div class="col-auto">
+                    <input type="checkbox" name="BudgetItems[${i}].usedTool" placeholder="Used Tool" />
+                    <label>Used third-party tool</label>
+                    </div>
+                    </div>
+
+                `;
+                container.appendChild(div);
+                const br = document.createElement('br');
+                container.appendChild(br);
             }
-
-            generateFieldsButton.addEventListener('click', generateFields);
-
-            // Optionally generate fields based on the default selection
-            generateFields();
         });
+
     </script>
-} *@
+} 

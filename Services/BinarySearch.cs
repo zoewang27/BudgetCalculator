@@ -1,31 +1,32 @@
-
+using BudgetCalculator.Models; 
 namespace BudgetCalculator.Services;
 
 public class BinarySearch : BaseService, IGoalSeek
 {
-    public (double budget, int iterations) FindTheBestBudget(double sumOtherAds, double Z, double Y1, double Y2, bool UsedThirdPartyToolXi, double toolAd, double HOURS)
+    /// <summary>
+    /// <summary>Finds the best budget that meets the criteria using the Binary Search method.
+    /// <summary>
+    public (double budget, int iterations) FindTheBestBudget(BudgetModel budgetModel)
     {
         double low = 0;
-        double high = Z;  
+        double high = budgetModel.TotalBudgetExpected;  
         double mid = 0;
         int iterationCount = 0;
 
-        for (int i = 0; i < MaxIterations; i++)
+        while (iterationCount < MaxIterations)
         {
             iterationCount++;
             mid = (low + high) / 2;
 
-            double toolAdFinal = toolAd; 
-            if (UsedThirdPartyToolXi) toolAdFinal = toolAd + mid;
+            // Calculate the total budget for the current midpoint
+            double currentBudget = CalculateAdsBudgets(mid, budgetModel);
 
-            double currentBudget = CalculateTotalBudget(mid, sumOtherAds,  Z, Y1,  Y2,  toolAdFinal,  HOURS);
-
-            if (Math.Abs(Z - currentBudget) < Tolerance)
+            if (Math.Abs(budgetModel.TotalBudgetExpected - currentBudget) < Tolerance)
             {
                 return (mid, iterationCount);
             }
 
-            if (currentBudget < Z)
+            if (currentBudget < budgetModel.TotalBudgetExpected)
             {
                 low = mid; 
             }
@@ -33,8 +34,13 @@ public class BinarySearch : BaseService, IGoalSeek
             {
                 high = mid;
             }
-        }
 
+            if (mid < 1)
+            {
+                return (0, iterationCount);
+            }
+        }
+        
         return (mid, iterationCount);
         
     }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 using System.Linq;
 using BudgetCalculator.Services; 
+using BudgetCalculator.Models; 
 
 namespace BudgetCalculator.Pages.Budget;
 
@@ -11,30 +12,16 @@ public class IndexModel : PageModel
     private readonly IEnumerable<IGoalSeek> _goalSeeks;
 
     // Constructor injection of IGoalSeek service collection
-    public IndexModel(IEnumerable<IGoalSeek> goalSeeks)
+    public IndexModel(IEnumerable<IGoalSeek> goalSeeks, ILogger<IndexModel> logger)
     {
         _goalSeeks = goalSeeks;
     }
 
     [BindProperty]
-    public double X1 { get; set; }
+    public double num { get; set; }
 
     [BindProperty]
-    public double X2 { get; set; }
-
-    [BindProperty]
-    public double X3 { get; set; }
-
-    [BindProperty]
-    public bool UsedThirdPartyToolX1 { get; set; }
-
-    [BindProperty]
-    public bool UsedThirdPartyToolX2 { get; set; }
-
-    [BindProperty]
-    public bool UsedThirdPartyToolX3 { get; set; }
-
-    [BindProperty]
+    
     public bool UsedThirdPartyToolXi { get; set; }
 
     [BindProperty]
@@ -51,28 +38,51 @@ public class IndexModel : PageModel
     
     public Dictionary<string, (double budget, int iterations)> Results { get; set; } = new Dictionary<string, (double budget, int iterations)>();
 
-    public void OnGet()
-    {
-    }
 
     public void OnPost()
     {
         try
         {
-            double sumOtherAds = X1 + X2 + X3;
+            // Initialize a new instance of BudgetModel with values from the form.
+            var budgetModel = new BudgetModel
+            {
+                AdBudgets = new List<AdBudget>(), 
+                TotalBudgetExpected = Z,
+                AgencyFeePercentage = Y1,
+                ThirdPartyToolPercentage = Y2,
+                Hours = HOURS,
+                IsUsedToolXi = UsedThirdPartyToolXi
+            };
 
-            double sumToolAd = 0;
-            if (UsedThirdPartyToolX1) sumToolAd += X1;
-            if (UsedThirdPartyToolX2) sumToolAd += X2;
-            if (UsedThirdPartyToolX3) sumToolAd += X3;
+            // Loop through each ad budget entry based on the number of entries specified.
+            for (int i = 0; i < num; i++)
+            {
+                // Get budget amount
+                string singleBudgetKey = $"BudgetItems[{i}].amount";
+                string singleBudgetValue = Request.Form[singleBudgetKey];
 
+                double.TryParse(singleBudgetValue, out double result);
+
+
+                // Check if this ad used the third-party tool
+                string checkboxKey = $"BudgetItems[{i}].usedTool";
+                bool isUsedTool = Request.Form.ContainsKey(checkboxKey) ? true : false;
+                
+                budgetModel.AdBudgets.Add(new AdBudget
+                {
+                    Amount = result,
+                    IsUsedTool = isUsedTool
+                });
+
+            }
+            
+            // Iterate through each implementation of the IGoalSeek interface.
             foreach (var goalSeek in _goalSeeks)
             {
-                var result = goalSeek.FindTheBestBudget(sumOtherAds, Z, Y1, Y2, UsedThirdPartyToolXi, sumToolAd, HOURS);
+                var result = goalSeek.FindTheBestBudget(budgetModel);
                 var implementationName = goalSeek.GetType().Name;
                 Results[implementationName] = (result.budget, result.iterations);
             }
-
         }
         catch (Exception ex)
         {
@@ -80,4 +90,8 @@ public class IndexModel : PageModel
         }
     }
 }
+
+
+
+
 

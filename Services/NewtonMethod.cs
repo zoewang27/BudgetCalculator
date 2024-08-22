@@ -1,22 +1,27 @@
+using BudgetCalculator.Models; 
 namespace BudgetCalculator.Services;
 
 public class NewtonMethod : BaseService, IGoalSeek
 {
-
-    public (double budget, int iterations) FindTheBestBudget(double sumOtherAds, double Z, double Y1, double Y2, bool UsedThirdPartyToolXi, double toolAd, double HOURS)
+    /// <summary>
+    /// <summary> Finds the best budget that meets the criteria using the Newton Method.
+    /// <summary>
+     public (double budget, int iterations) FindTheBestBudget(BudgetModel budgetModel)
     {
-        double Xi = Z / 2;
+        double Xi = budgetModel.TotalBudgetExpected / 2;
         int iterationCount = 0;
-        for (int i = 0; i < MaxIterations; i++)
+
+        while (iterationCount < MaxIterations)
         {
             iterationCount++;
 
-            double toolAdFinal = toolAd; 
-            if (UsedThirdPartyToolXi) toolAdFinal = toolAd + Xi;
+            double currentBudget = CalculateAdsBudgets(Xi, budgetModel);
+            
+            // Calculate the difference between the expected total budget and the current budget estimate
+            double f_Xi = budgetModel.TotalBudgetExpected - currentBudget;
 
-            double currentBudget = CalculateTotalBudget(Xi, sumOtherAds,  Z, Y1,  Y2,  toolAdFinal,  HOURS);
-            double f_Xi = Z - currentBudget;
-            double f_prime_Xi = -1 * (1 + Y1 + Y2);
+            // Calculate the derivative of the function with respect to Xi.
+            double f_prime_Xi = -1 * (1 + budgetModel.AgencyFeePercentage + budgetModel.ThirdPartyToolPercentage);
 
             if (Math.Abs(f_Xi) < Tolerance)
             {
@@ -30,6 +35,12 @@ public class NewtonMethod : BaseService, IGoalSeek
 
             // Newton's method update
             Xi = Xi - f_Xi / f_prime_Xi;
+
+
+            if (Xi < 0)
+            {
+                return (0,iterationCount); 
+            }
         }
         throw new Exception("Max iterations reached, solution not found.");
     }
