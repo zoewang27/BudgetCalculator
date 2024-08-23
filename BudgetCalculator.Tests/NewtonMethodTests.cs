@@ -18,7 +18,7 @@ public class NewtonMethodTests
                 new AdBudget { Amount = 100, IsUsedTool = false },
                 new AdBudget { Amount = 150, IsUsedTool = true }
             },
-            TotalBudgetExpected = 400,
+            TotalCampaignBudget = 400,
             AgencyFeePercentage = 0.1,
             ThirdPartyToolPercentage = 0.05,
             Hours = 50,
@@ -46,8 +46,8 @@ public class NewtonMethodTests
             + budgetModel.Hours;
 
         // Assert
-        Assert.True(Math.Abs(budgetModel.TotalBudgetExpected - computedBudget) < 1e-6, 
-                    $"Expected budget: {budgetModel.TotalBudgetExpected}, but got: {computedBudget}");
+        Assert.True(Math.Abs(budgetModel.TotalCampaignBudget - computedBudget) < 1e-6, 
+                    $"Expected budget: {budgetModel.TotalCampaignBudget}, but got: {computedBudget}");
         Assert.InRange(result.iterations, 1, 100);
     }
 
@@ -62,7 +62,7 @@ public class NewtonMethodTests
             {
                 new AdBudget { Amount = 10, IsUsedTool = false }
             },
-            TotalBudgetExpected = 1,
+            TotalCampaignBudget = 1,
             AgencyFeePercentage = 0.1,
             ThirdPartyToolPercentage = 0.05,
             Hours = 50,
@@ -84,7 +84,7 @@ public class NewtonMethodTests
         var budgetModel = new BudgetModel
         {
             AdBudgets = new List<AdBudget>(), // No ad budgets
-            TotalBudgetExpected = 200,
+            TotalCampaignBudget = 200,
             AgencyFeePercentage = 0.1,
             ThirdPartyToolPercentage = 0.05,
             Hours = 50,
@@ -112,8 +112,8 @@ public class NewtonMethodTests
             + budgetModel.Hours;
 
         // Assert
-        Assert.True(Math.Abs(budgetModel.TotalBudgetExpected - computedBudget) < 1e-6, 
-                    $"Expected budget: {budgetModel.TotalBudgetExpected}, but got: {computedBudget}");
+        Assert.True(Math.Abs(budgetModel.TotalCampaignBudget - computedBudget) < 1e-6, 
+                    $"Expected budget: {budgetModel.TotalCampaignBudget}, but got: {computedBudget}");
         Assert.InRange(result.iterations, 1, 100);
     }
 
@@ -129,7 +129,7 @@ public class NewtonMethodTests
                 new AdBudget { Amount = 5000, IsUsedTool = false },
                 new AdBudget { Amount = 7000, IsUsedTool = true }
             },
-            TotalBudgetExpected = 1000000, // Large budget
+            TotalCampaignBudget = 1000000, // Large budget
             AgencyFeePercentage = 0.1,
             ThirdPartyToolPercentage = 0.05,
             Hours = 10000,
@@ -157,8 +157,8 @@ public class NewtonMethodTests
             + budgetModel.Hours;
 
         // Assert
-        Assert.True(Math.Abs(budgetModel.TotalBudgetExpected - computedBudget) < 1e-6, 
-                    $"Expected budget: {budgetModel.TotalBudgetExpected}, but got: {computedBudget}");
+        Assert.True(Math.Abs(budgetModel.TotalCampaignBudget - computedBudget) < 1e-6, 
+                    $"Expected budget: {budgetModel.TotalCampaignBudget}, but got: {computedBudget}");
         Assert.InRange(result.iterations, 1, 100);
     }
 

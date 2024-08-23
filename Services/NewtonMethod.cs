@@ -8,7 +8,7 @@ public class NewtonMethod : BaseService, IGoalSeek
     /// <summary>
      public (double budget, int iterations) FindTheBestBudget(BudgetModel budgetModel)
     {
-        double Xi = budgetModel.TotalBudgetExpected / 2;
+        double Xi = budgetModel.TotalCampaignBudget / 2;
         int iterationCount = 0;
 
         while (iterationCount < MaxIterations)
@@ -18,7 +18,7 @@ public class NewtonMethod : BaseService, IGoalSeek
             double currentBudget = CalculateAdsBudgets(Xi, budgetModel);
             
             // Calculate the difference between the expected total budget and the current budget estimate
-            double f_Xi = budgetModel.TotalBudgetExpected - currentBudget;
+            double f_Xi = budgetModel.TotalCampaignBudget- currentBudget;
 
             // Calculate the derivative of the function with respect to Xi.
             double f_prime_Xi = -1 * (1 + budgetModel.AgencyFeePercentage + budgetModel.ThirdPartyToolPercentage);

@@ -12,7 +12,7 @@ public class BudgetModel
 
     [Required]
     [Range(0, double.MaxValue, ErrorMessage = "The value must be non-negative.")]
-    public double TotalBudgetExpected { get; set; }
+    public double TotalCampaignBudget { get; set; }
 
     [Required]
     [Range(0, 1, ErrorMessage = "Agency Fee Percentage must be between 0 and 1.")]

@@ -9,7 +9,7 @@ public class BinarySearch : BaseService, IGoalSeek
     public (double budget, int iterations) FindTheBestBudget(BudgetModel budgetModel)
     {
         double low = 0;
-        double high = budgetModel.TotalBudgetExpected;  
+        double high = budgetModel.TotalCampaignBudget;  
         double mid = 0;
         int iterationCount = 0;
 
@@ -21,12 +21,12 @@ public class BinarySearch : BaseService, IGoalSeek
             // Calculate the total budget for the current midpoint
             double currentBudget = CalculateAdsBudgets(mid, budgetModel);
 
-            if (Math.Abs(budgetModel.TotalBudgetExpected - currentBudget) < Tolerance)
+            if (Math.Abs(budgetModel.TotalCampaignBudget - currentBudget) < Tolerance)
             {
                 return (mid, iterationCount);
             }
 
-            if (currentBudget < budgetModel.TotalBudgetExpected)
+            if (currentBudget < budgetModel.TotalCampaignBudget)
             {
                 low = mid; 
             }

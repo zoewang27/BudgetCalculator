@@ -47,7 +47,7 @@ public class IndexModel : PageModel
             var budgetModel = new BudgetModel
             {
                 AdBudgets = new List<AdBudget>(), 
-                TotalBudgetExpected = Z,
+                TotalCampaignBudget = Z,
                 AgencyFeePercentage = Y1,
                 ThirdPartyToolPercentage = Y2,
                 Hours = HOURS,
